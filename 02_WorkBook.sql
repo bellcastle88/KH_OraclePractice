@@ -39,22 +39,57 @@ from tb_professor;
 5. 춘 기술대학교의 재수생 입학자를 구하려고 핚다. 어떻게 찾아낼 것인가? 이때,
 19 살에 입학하면 재수를 하지 않은 것으로 갂주핚다.
 
+select student_no, student_name
+from tb_student
+where extract(year from entrance_date)
+              -((decode(substr(student_ssn,8,1),1,'1900',2,'1900','2000')
+              +substr(student_ssn,1,2))) > 19;
+                      
+
 6. 2020 년 크리스마스는 무슨 요일인가?
+
+select to_char(to_date('20/12/25'), 'yyyy"년"mm"월"dd"일"day')
+from dual;
+
 
 7. TO_DATE('99/10/11','YY/MM/DD'), TO_DATE('49/10/11','YY/MM/DD') 은 각각 몇 년 몇
 월 몇 일을 의미핛까? 또 TO_DATE('99/10/11','RR/MM/DD'),
 TO_DATE('49/10/11','RR/MM/DD') 은 각각 몇 년 몇 월 몇 일을 의미핛까?
 
+                      
+select to_char(to_date('99/10/11','YY/MM/DD'),'yy"년"mm"월"dd"일"'), 
+        to_char(TO_DATE('49/10/11','YY/MM/DD'), 'yy"년"mm"월"dd"일"') , 
+       to_char(TO_DATE('99/10/11','RR/MM/DD'), 'yy"년"mm"월"dd"일"') , 
+       to_char(TO_DATE('49/10/11','RR/MM/DD'), 'yy"년"mm"월"dd"일"') 
+from dual;
+                      
+                      
 8. 춘 기술대학교의 2000 년도 이후 입학자들은 학번이 A 로 시작하게 되어있다. 2000 년도
 이젂 학번을 받은 학생들의 학번과 이름을 보여주는 SQL 문장을 작성하시오.
 
+select student_no, student_name
+from tb_student
+where student_no NOT LIKE 'A%';
+                      
+                      
 9. 학번이 A517178 인 핚아름 학생의 학점 총 평점을 구하는 SQL 문을 작성하시오. 단,
 이때 출력 화면의 헤더는 "평점" 이라고 찍히게 하고, 점수는 반올림하여 소수점 이하 핚
 자리까지맊 표시핚다.
-
+                      
+select round(avg(point),1) 평점
+from tb_grade
+where student_no = 'A517178';
+                      
+                      
 10. 학과별 학생수를 구하여 "학과번호", "학생수(명)" 의 형태로 헤더를 맊들어 결과값이
 출력되도록 하시오.
 
+select department_no, count(*)
+from tb_student
+group by department_no
+order by 1;
+
+                      
 11. 지도 교수를 배정받지 못핚 학생의 수는 몇 명 정도 되는 알아내는 SQL 문을
 작성하시오.
 
