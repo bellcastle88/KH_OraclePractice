@@ -92,21 +92,51 @@ order by 1;
                       
 11. 지도 교수를 배정받지 못핚 학생의 수는 몇 명 정도 되는 알아내는 SQL 문을
 작성하시오.
+                      
+select count(*) 학생수
+from tb_student
+where coach_professor_no is null;                      
+                 
 
 12. 학번이 A112113 인 김고운 학생의 년도 별 평점을 구하는 SQL 문을 작성하시오. 단,
 이때 출력 화면의 헤더는 "년도", "년도 별 평점" 이라고 찍히게 하고, 점수는 반올림하여
 소수점 이하 핚 자리까지맊 표시핚다.
+                      
+select substr(term_no, 1, 4) 년도, 
+       round(avg(point), 1) 년도별평점
+from tb_grade
+where student_no = 'A112113'
+group by substr(term_no, 1, 4)
+order by 년도;
 
+                      
 13. 학과 별 휴학생 수를 파악하고자 핚다. 학과 번호와 휴학생 수를 표시하는 SQL 문장을
 작성하시오
 
+select department_no 학과번호, count(decode(absence_yn, 'Y', 1)) "휴학생 수"
+from tb_student
+group by department_no
+order by 1;
+                      
+
 14. 춘 대학교에 다니는 동명이인(同名異人) 학생들의 이름을 찾고자 핚다. 어떤 SQL
 문장을 사용하면 가능하겠는가?
+                                        
+select student_name 동일이름, count(*) "동명인 수"
+from tb_student
+group by student_name
+having count(*) > 1
+order by 1;                                  
+                                        
 
 15. 학번이 A112113 인 김고운 학생의 년도, 학기 별 평점과 년도 별 누적 평점 , 총
 평점을 구하는 SQL 문을 작성하시오. (단, 평점은 소수점 1 자리까지맊 반올림하여
 표시핚다.)
-
+                                        
+select nvl(substr(term_no,1,4),' ') 년도, nvl(substr(term_no,5,6),' ') 학기, round(avg(point),1) 평점
+from tb_grade
+where student_no='A112113'
+group by rollup(substr(term_no,1,4), substr(term_no,5,6));
 
 
 
