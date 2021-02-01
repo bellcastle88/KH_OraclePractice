@@ -1,7 +1,7 @@
 --@실습문제 : INNER JOIN & OUTER JOIN
 --1. 학번, 학생명, 학과명을 출력
 select s.student_no 학번,
-        s.student_name 학생명,
+        s.student_name 학생명, 
         d.department_name 학과명
 from tb_student s 
             join tb_department d 
